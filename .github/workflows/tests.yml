@@ -27,20 +27,20 @@ jobs:
           chmod 600 key.pem
 
       - name: Run OCI Bot
-        run: php index.php
-        env:
-          OCI_REGION: ${{ secrets.OCI_REGION }}
-          OCI_USER_ID: ${{ secrets.OCI_USER_ID }}
-          OCI_TENANCY_ID: ${{ secrets.OCI_TENANCY_ID }}
-          OCI_KEY_FINGERPRINT: ${{ secrets.OCI_KEY_FINGERPRINT }}
-          OCI_PRIVATE_KEY_FILENAME: key.pem
-          OCI_AVAILABILITY_DOMAIN: ${{ secrets.OCI_AVAILABILITY_DOMAIN }}
-          OCI_SUBNET_ID: ${{ secrets.OCI_SUBNET_ID }}
-          OCI_IMAGE_ID: ${{ secrets.OCI_IMAGE_ID }}
-          OCI_OCPUS: ${{ secrets.OCI_OCPUS }}
-          OCI_MEMORY_IN_GBS: ${{ secrets.OCI_MEMORY_IN_GBS }}
-          OCI_SHAPE: ${{ secrets.OCI_SHAPE }}
-          OCI_MAX_INSTANCES: ${{ secrets.OCI_MAX_INSTANCES }}
-          OCI_SSH_PUBLIC_KEY: ${{ secrets.OCI_SSH_PUBLIC_KEY }}
-          TELEGRAM_USER_ID: ${{ secrets.TELEGRAM_USER_ID }}
-          TELEGRAM_BOT_API_KEY: ${{ secrets.TELEGRAM_BOT_API_KEY }}
+        run: |
+          # Limpieza automatica de comillas, comillas simples y retornos de carro
+          export OCI_REGION=$(echo "${{ secrets.OCI_REGION }}" | tr -d '"'\''\r ')
+          export OCI_USER_ID=$(echo "${{ secrets.OCI_USER_ID }}" | tr -d '"'\''\r ')
+          export OCI_TENANCY_ID=$(echo "${{ secrets.OCI_TENANCY_ID }}" | tr -d '"'\''\r ')
+          export OCI_KEY_FINGERPRINT=$(echo "${{ secrets.OCI_KEY_FINGERPRINT }}" | tr -d '"'\''\r ')
+          export OCI_SUBNET_ID=$(echo "${{ secrets.OCI_SUBNET_ID }}" | tr -d '"'\''\r ')
+          export OCI_OCPUS=$(echo "${{ secrets.OCI_OCPUS }}" | tr -d '"'\''\r ')
+          export OCI_MEMORY_IN_GBS=$(echo "${{ secrets.OCI_MEMORY_IN_GBS }}" | tr -d '"'\''\r ')
+          export OCI_SHAPE=$(echo "${{ secrets.OCI_SHAPE }}" | tr -d '"'\''\r ')
+          export OCI_MAX_INSTANCES=$(echo "${{ secrets.OCI_MAX_INSTANCES }}" | tr -d '"'\''\r ')
+          export OCI_PRIVATE_KEY_FILENAME="key.pem"
+          export OCI_SSH_PUBLIC_KEY="${{ secrets.OCI_SSH_PUBLIC_KEY }}"
+          export TELEGRAM_USER_ID="${{ secrets.TELEGRAM_USER_ID }}"
+          export TELEGRAM_BOT_API_KEY="${{ secrets.TELEGRAM_BOT_API_KEY }}"
+          
+          php index.php
